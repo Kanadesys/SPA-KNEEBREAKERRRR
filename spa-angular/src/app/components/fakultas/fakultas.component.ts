@@ -61,7 +61,7 @@ export class FakultasComponent implements OnInit {  // Deklarasi komponen dengan
           this.fakultasForm.reset();  // Reset formulir
           this.isSubmitting = false;  // Reset status submitting
 
-          // Tutup modal setelah data berhasil ditambahkan
+          // Tutup modal setelah data berhasil ditambahkan  (DI COMMENT KALO VERSI ANGULAR DIATAS 18)
           const modalElement = document.getElementById('tambahFakultasModal') as HTMLElement;
           if (modalElement) {
             const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
