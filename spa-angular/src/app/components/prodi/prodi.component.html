@@ -1,5 +1,17 @@
 <div class="container mt-4">
-  <h2>Daftar Prodi</h2>
+  <!-- Kontainer utama dengan margin top (mt-4) untuk memberikan spasi di atas. -->
+  <h2>Daftar Program Studi</h2>
+  <!-- Judul halaman untuk menampilkan daftar program studi. -->
+
+  <!-- Loader -->
+  <div class="d-flex justify-content-center mt-4" *ngIf="isLoading">
+    <!-- Div ini hanya muncul jika `isLoading` bernilai true, menggunakan directive Angular *ngIf. -->
+    <div class="spinner-border text-primary" role="status">
+      <!-- Loader berbentuk spinner Bootstrap untuk menampilkan indikator loading. -->
+      <span class="visually-hidden">Loading...</span>
+      <!-- Teks alternatif untuk pembaca layar (accessibility). -->
+    </div>
+  </div>
 
   <!-- Tombol untuk membuka modal -->
   <button
@@ -10,6 +22,7 @@
   >
     Tambah Prodi
   </button>
+  <!-- Tombol dengan Bootstrap yang membuka modal menggunakan atribut `data-bs-toggle` dan `data-bs-target`. -->
 
   <!-- Modal Tambah Prodi -->
   <div
@@ -19,22 +32,31 @@
     aria-labelledby="tambahProdiModalLabel"
     aria-hidden="true"
   >
+    <!-- Modal Bootstrap dengan ID unik untuk menampilkan formulir tambah prodi. -->
     <div class="modal-dialog">
+      <!-- Dialog modal dengan layout default Bootstrap. -->
       <div class="modal-content">
+        <!-- Konten modal -->
         <div class="modal-header">
+          <!-- Header modal -->
           <h5 class="modal-title" id="tambahProdiModalLabel">
-            Tambah Prodi
+            Tambah Program Studi
           </h5>
+          <!-- Judul modal -->
           <button
             type="button"
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
+          <!-- Tombol untuk menutup modal -->
         </div>
         <div class="modal-body">
+          <!-- Bagian isi modal -->
           <form [formGroup]="prodiForm" (ngSubmit)="addProdi()">
+            <!-- Form Angular yang terhubung dengan `prodiForm`. -->
             <div class="mb-3">
+              <!-- Input untuk nama prodi -->
               <label for="nama" class="form-label">Nama Prodi</label>
               <input
                 id="nama"
@@ -42,8 +64,10 @@
                 class="form-control"
                 formControlName="nama"
               />
+              <!-- Input menggunakan formControlName Angular untuk menghubungkan field dengan formGroup. -->
             </div>
             <div class="mb-3">
+              <!-- Input untuk singkatan prodi -->
               <label for="singkatan" class="form-label">Singkatan</label>
               <input
                 id="singkatan"
@@ -52,6 +76,23 @@
                 formControlName="singkatan"
               />
             </div>
+            <div class="mb-3">
+              <!-- Dropdown untuk memilih fakultas -->
+              <label for="fakultas" class="form-label">Fakultas</label>
+              <select
+                id="fakultas"
+                class="form-select"
+                formControlName="fakultas_id"
+              >
+                <option
+                  *ngFor="let fakultas of fakultas"
+                  [value]="fakultas._id"
+                >
+                  {{ fakultas.nama }}
+                </option>
+                <!-- Menggunakan *ngFor untuk membuat opsi dropdown berdasarkan data fakultas. -->
+              </select>
+            </div>
             <button
               type="submit"
               class="btn btn-primary"
@@ -59,26 +100,34 @@
             >
               {{ isSubmitting ? "Menyimpan..." : "Tambah Prodi" }}
             </button>
+            <!-- Tombol submit dengan state dinamis berdasarkan isSubmitting. -->
           </form>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Data Prodi -->
-  <table class="table table-bordered table-striped" *ngIf="!isLoading">
-    <thead>
-      <tr>
-        <th>Nama</th>
-        <th>Singkatan</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of prodi">
-        <td>{{ item.nama }}</td>
-        <td>{{ item.singkatan }}</td>
-        <td>{{ item.fakultas_id.nama}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Data Prodi dalam bentuk Card -->
+  <div class="row row-cols-1 row-cols-md-3 g-4 mt-4" *ngIf="!isLoading">
+    <!-- Grid untuk menampilkan daftar program studi dengan Bootstrap, hanya muncul jika !isLoading. -->
+    <div class="col" *ngFor="let item of prodi">
+      <!-- Menggunakan *ngFor untuk membuat kartu berdasarkan data program studi. -->
+      <div class="card shadow-sm h-100">
+        <!-- Card Bootstrap dengan shadow dan ketinggian penuh. -->
+        <div class="card-body">
+          <!-- Isi dari setiap kartu -->
+          <h5 class="card-title">{{ item.nama }}</h5>
+          <!-- Menampilkan nama program studi. -->
+          <p class="card-text">
+            <strong>Singkatan:</strong> {{ item.singkatan }}
+            <!-- Menampilkan singkatan program studi. -->
+          </p>
+          <p class="card-text">
+            <strong>Fakultas:</strong> {{ item.fakultas_id?.nama }}
+            <!-- Menampilkan nama fakultas, menggunakan safe navigation operator (?.) untuk menghindari error jika data fakultas_id null. -->
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
